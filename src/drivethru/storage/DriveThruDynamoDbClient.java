@@ -123,7 +123,9 @@ public class DriveThruDynamoDbClient implements IDriveThruDao{
 		driveThruCategoryDataItem = new DriveThruCategoryDataItem();
 		driveThruCategoryDataItem.setCategoryName("sandwhich");
 		driveThruCategoryDataItems.add(driveThruCategoryDataItem);
-		return driveThruCategoryDataItems;
-		//return mapper.scan(DriveThruCategoryDataItem.class, scanExpression);
+		//return driveThruCategoryDataItems;
+		DynamoDBMapper mapper = createDynamoDBMapper();
+		
+		return mapper.scan(DriveThruCategoryDataItem.class, scanExpression);
 	}
 }

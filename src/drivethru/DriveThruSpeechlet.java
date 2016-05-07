@@ -108,7 +108,7 @@ public class DriveThruSpeechlet implements Speechlet {
 			return driveThruManager.getUserNameIntentResponse(intent, session, skillContext);
 
 		} else if ("CategoryInquiryIntent".equals(intent.getName())) {
-			return driveThruManager.getUserNameIntentResponse(intent, session, skillContext);
+			return driveThruManager.getCategoryInquiryIntent(intent, session, skillContext);
 
 		} else if ("AMAZON.HelpIntent".equals(intent.getName())) {
 			return driveThruManager.getHelpIntentResponse(intent, session, skillContext);

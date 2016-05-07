@@ -1,0 +1,60 @@
+UserNameIntent This is {UserName}
+UserNameIntent I am {UserName}
+UserNameIntent {UserName} here
+UserNameIntent you are talking to {UserName}
+UserNameIntent you are speaking with {UserName}
+UserNameIntent you are speaking to {UserName}
+
+WellBeingIntent How are you {UserName}
+WellBeingIntent How's it going {UserName}
+WellBeingIntent How are you doing {UserName}
+WellBeingIntent How are you
+WellBeingIntent How's it going
+WellBeingIntent How are you doing
+
+InquiryIntent what is the special today
+InquiryIntent what is special today
+InquiryIntent what's special today
+InquiryIntent what are vegetarian options
+InquiryIntent what are vegan options available
+InquiryIntent what are veg options
+InquiryIntent what are veggie options
+InquiryIntent veg options please
+InquiryIntent does {MenuItem} have {Ingredient}
+InquiryIntent does {MenuItem} contain {Ingredient}
+InquiryIntent do you have {MenuItem}
+InquiryIntent do you make {MenuItem}
+InquiryIntent do you serve {MenuItem}
+
+OrderPlacementIntent Yes I would like to order {Count} of them
+OrderPlacementIntent Yes I would like to order {Count} of those
+OrderPlacementIntent Yes I would like to order
+OrderPlacementIntent Yes I want to order more
+OrderPlacementIntent I want to order {MenuItem} without {Ingredient}
+OrderPlacementIntent I want to order {MenuItem} with {Count} {Ingredient}
+OrderPlacementIntent I wanna order {MenuItem}
+
+OrderChangeIntent Can you cancel my last item
+OrderChangeIntent Can you make {Count} of my last item instead of {Count}
+OrderChangeIntent Can you remove {Ingredient} from {MenuItem}
+
+OrderRepeatIntent Can you tell what's on my order till now
+OrderRepeatIntent Can you tell what's on my order as of now
+OrderRepeatIntent Can you tell what's on my order now
+
+PriceIntent can you tell what are all the items under price of {Count} Dollars
+PriceIntent what do you have under {Count} dollars
+PriceIntent can you tell what's under {Count} bucks
+PriceIntent what do you have under {Count} dollars
+PriceIntent what can I get under {Count} dollars
+PriceIntent what can I buy under {Count} dollars
+
+OrderConfirmationIntent No thanks
+OrderConfirmationIntent I'm good
+OrderConfirmationIntent Nopes
+OrderConfirmationIntent Nope
+OrderConfirmationIntent That's it
+OrderConfirmationIntent That's all
+OrderConfirmationIntent Yes Confirm it
+OrderConfirmationIntent Yes confirm
+OrderConfirmationIntent yes please

@@ -6,10 +6,10 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 /**
  * Client for DynamoDB persistance layer for the Score Keeper skill.
  */
-public class ScoreKeeperDynamoDbClient {
+public class DriveThruDynamoDbClient {
     private final AmazonDynamoDBClient dynamoDBClient;
 
-    public ScoreKeeperDynamoDbClient(final AmazonDynamoDBClient dynamoDBClient) {
+    public DriveThruDynamoDbClient(final AmazonDynamoDBClient dynamoDBClient) {
         this.dynamoDBClient = dynamoDBClient;
     }
 

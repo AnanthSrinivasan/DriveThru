@@ -71,7 +71,7 @@
   </properties>
 
   <build>
-    <sourceDirectory>src/drivethru</sourceDirectory>
+    <sourceDirectory>src</sourceDirectory>
     <pluginManagement>
       <plugins>
         <plugin>

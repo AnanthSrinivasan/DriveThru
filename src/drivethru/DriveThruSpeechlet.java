@@ -24,17 +24,20 @@ import com.amazon.speech.speechlet.SpeechletResponse;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 
 /**
- * This sample shows how to create a Lambda function for handling Alexa Skill requests that:
+ * This sample shows how to create a Lambda function for handling Alexa Skill
+ * requests that:
  *
  * <ul>
  * <li><b>Multiple slots</b>: has 2 slots (name and score)</li>
- * <li><b>Database Interaction</b>: demonstrates how to read and write data to DynamoDB.</li>
+ * <li><b>Database Interaction</b>: demonstrates how to read and write data to
+ * DynamoDB.</li>
  * <li><b>NUMBER slot</b>: demonstrates how to handle number slots.</li>
- * <li><b>Custom slot type</b>: demonstrates using custom slot types to handle a finite set of known values</li>
- * <li><b>Dialog and Session state</b>: Handles two models, both a one-shot ask and tell model, and
- * a multi-turn dialog model. If the user provides an incorrect slot in a one-shot model, it will
- * direct to the dialog model. See the examples section below for sample interactions of these
- * models.</li>
+ * <li><b>Custom slot type</b>: demonstrates using custom slot types to handle a
+ * finite set of known values</li>
+ * <li><b>Dialog and Session state</b>: Handles two models, both a one-shot ask
+ * and tell model, and a multi-turn dialog model. If the user provides an
+ * incorrect slot in a one-shot model, it will direct to the dialog model. See
+ * the examples section below for sample interactions of these models.</li>
  * </ul>
  * <p>
  * <h2>Examples</h2>
@@ -68,77 +71,73 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
  * Alexa: "Jeff has zero points and Bob has three"
  */
 public class DriveThruSpeechlet implements Speechlet {
-    private static final Logger log = LoggerFactory.getLogger(DriveThruSpeechlet.class);
+	private static final Logger log = LoggerFactory.getLogger(DriveThruSpeechlet.class);
 
-    private AmazonDynamoDBClient amazonDynamoDBClient;
-    
-    private DriveThruManager driveThruManager;
-    
-    private SkillContext skillContext;
+	private AmazonDynamoDBClient amazonDynamoDBClient;
 
-    @Override
-    public void onSessionStarted(final SessionStartedRequest request, final Session session)
-            throws SpeechletException {
-        log.info("onSessionStarted requestId={}, sessionId={}", request.getRequestId(),
-                session.getSessionId());
+	private DriveThruManager driveThruManager;
 
-        initializeComponents();
+	private SkillContext skillContext;
 
-        // if user said a one shot command that triggered an intent event,
-        // it will start a new session, and then we should avoid speaking too many words.
-        skillContext.setNeedsMoreHelp(false);
-    }
+	@Override
+	public void onSessionStarted(final SessionStartedRequest request, final Session session) throws SpeechletException {
+		log.info("onSessionStarted requestId={}, sessionId={}", request.getRequestId(), session.getSessionId());
 
-    @Override
-    public SpeechletResponse onLaunch(final LaunchRequest request, final Session session)
-            throws SpeechletException {
-        log.info("onLaunch requestId={}, sessionId={}", request.getRequestId(),
-                session.getSessionId());
+		initializeComponents();
 
-        return driveThruManager.getLaunchResponse(request, session);
-    }
+		// if user said a one shot command that triggered an intent event,
+		// it will start a new session, and then we should avoid speaking too
+		// many words.
+		skillContext.setNeedsMoreHelp(false);
+	}
 
-    @Override
-    public SpeechletResponse onIntent(IntentRequest request, Session session)
-            throws SpeechletException {
-        log.info("onIntent requestId={}, sessionId={}", request.getRequestId(),
-                session.getSessionId());
-        initializeComponents();
+	@Override
+	public SpeechletResponse onLaunch(final LaunchRequest request, final Session session) throws SpeechletException {
+		log.info("onLaunch requestId={}, sessionId={}", request.getRequestId(), session.getSessionId());
 
-        Intent intent = request.getIntent();
-        if ("UserNameIntent".equals(intent.getName())) {
-        		return driveThruManager.getUserNameIntentResponse(intent, session, skillContext);
-        		
-        } else if ("AMAZON.HelpIntent".equals(intent.getName())) {
-            return driveThruManager.getHelpIntentResponse(intent, session, skillContext);
+		return driveThruManager.getLaunchResponse(request, session);
+	}
 
-        } else if ("AMAZON.CancelIntent".equals(intent.getName())) {
-            return driveThruManager.getExitIntentResponse(intent, session, skillContext);
+	@Override
+	public SpeechletResponse onIntent(IntentRequest request, Session session) throws SpeechletException {
+		log.info("onIntent requestId={}, sessionId={}", request.getRequestId(), session.getSessionId());
+		initializeComponents();
 
-        } else if ("AMAZON.StopIntent".equals(intent.getName())) {
-            return driveThruManager.getExitIntentResponse(intent, session, skillContext);
+		Intent intent = request.getIntent();
+		if ("UserNameIntent".equals(intent.getName())) {
+			return driveThruManager.getUserNameIntentResponse(intent, session, skillContext);
 
-        } else {
-            throw new IllegalArgumentException("Unrecognized intent: " + intent.getName());
-        }
-    }
+		} else if ("CategoryInquiryIntent".equals(intent.getName())) {
+			return driveThruManager.getUserNameIntentResponse(intent, session, skillContext);
 
-    @Override
-    public void onSessionEnded(final SessionEndedRequest request, final Session session)
-            throws SpeechletException {
-        log.info("onSessionEnded requestId={}, sessionId={}", request.getRequestId(),
-                session.getSessionId());
-        // any cleanup logic goes here
-    }
+		} else if ("AMAZON.HelpIntent".equals(intent.getName())) {
+			return driveThruManager.getHelpIntentResponse(intent, session, skillContext);
 
-    /**
-     * Initializes the instance components if needed.
-     */
-    private void initializeComponents() {
-        if (amazonDynamoDBClient == null) {
-            amazonDynamoDBClient = new AmazonDynamoDBClient();
-            driveThruManager = new DriveThruManager(amazonDynamoDBClient);
-            skillContext = new SkillContext();
-        }
-    }
+		} else if ("AMAZON.CancelIntent".equals(intent.getName())) {
+			return driveThruManager.getExitIntentResponse(intent, session, skillContext);
+
+		} else if ("AMAZON.StopIntent".equals(intent.getName())) {
+			return driveThruManager.getExitIntentResponse(intent, session, skillContext);
+
+		} else {
+			throw new IllegalArgumentException("Unrecognized intent: " + intent.getName());
+		}
+	}
+
+	@Override
+	public void onSessionEnded(final SessionEndedRequest request, final Session session) throws SpeechletException {
+		log.info("onSessionEnded requestId={}, sessionId={}", request.getRequestId(), session.getSessionId());
+		// any cleanup logic goes here
+	}
+
+	/**
+	 * Initializes the instance components if needed.
+	 */
+	private void initializeComponents() {
+		if (amazonDynamoDBClient == null) {
+			amazonDynamoDBClient = new AmazonDynamoDBClient();
+			driveThruManager = new DriveThruManager(amazonDynamoDBClient);
+			skillContext = new SkillContext();
+		}
+	}
 }

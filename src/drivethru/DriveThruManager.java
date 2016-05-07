@@ -9,10 +9,12 @@
  */
 package drivethru;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.SortedMap;
 
+import drivethru.storage.DriveThruCategoryDataItem;
 import drivethru.storage.DriveThruDao;
 import drivethru.storage.DriveThruDynamoDbClient;
 import drivethru.storage.IDriveThruDao;
@@ -35,12 +37,11 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
  */
 public class DriveThruManager {
 
-    private final IDriveThruDao scoreKeeperDao;
+    private final IDriveThruDao dynamoDbClient;
 
     public DriveThruManager(final AmazonDynamoDBClient amazonDynamoDbClient) {
-        DriveThruDynamoDbClient dynamoDbClient =
+        dynamoDbClient =
                 new DriveThruDynamoDbClient(amazonDynamoDbClient);
-        scoreKeeperDao = new DriveThruDao(dynamoDbClient);
     }
     
     /**
@@ -72,7 +73,24 @@ public class DriveThruManager {
 	    repromptText = "Can you please give me your order ?";
 
         return getAskSpeechletResponse(speechText, repromptText);
-    }    
+    }   
+    
+    public SpeechletResponse getCategoryInquiryIntent(Intent intent, Session session, SkillContext skillContext) {
+        // Speak welcome message and ask user questions
+        String speechText, repromptText;
+        List<DriveThruCategoryDataItem> driveThruCategoryDataItems = dynamoDbClient.getCategories();
+
+//        scoreKeeperDao
+        
+	    speechText = "here are the categories";
+	    for(DriveThruCategoryDataItem driveThruCategoryDataItem : driveThruCategoryDataItems)
+	    {
+	    	speechText += driveThruCategoryDataItem.getCategoryName() + " , ";
+	    }
+	    repromptText = "Can you please give me your order ?";
+
+        return getAskSpeechletResponse(speechText, repromptText);
+    }
     
     /**
      * Creates and returns response for the help intent.

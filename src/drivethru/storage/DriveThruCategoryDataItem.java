@@ -3,12 +3,12 @@ package drivethru.storage;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
-@DynamoDBTable(tableName = "MenuCategories")
+@DynamoDBTable(tableName = "menu_categories")
 public class DriveThruCategoryDataItem {
 	
 private String categoryName;
 
-@DynamoDBHashKey(attributeName = "CategoryName")
+@DynamoDBHashKey(attributeName = "category_name")
 public String getCategoryName() {
 	return categoryName;
 }

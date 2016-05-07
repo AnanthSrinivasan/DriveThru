@@ -1,12 +1,12 @@
 package drivethru.storage;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
-import com.amazonaws.services.dynamodbv2.xspec.QueryExpressionSpec;
 
 /**
  * Client for DynamoDB persistance layer for the Score Keeper skill.
@@ -115,6 +115,15 @@ public class DriveThruDynamoDbClient implements IDriveThruDao{
 	@Override
 	public List<DriveThruCategoryDataItem> getCategories() {
 		DynamoDBScanExpression scanExpression = new DynamoDBScanExpression();
-		return mapper.scan(DriveThruCategoryDataItem.class, scanExpression);
+		List<DriveThruCategoryDataItem> driveThruCategoryDataItems = new ArrayList<>();
+		DriveThruCategoryDataItem driveThruCategoryDataItem = new DriveThruCategoryDataItem();
+		driveThruCategoryDataItem.setCategoryName("burger");
+		driveThruCategoryDataItems.add(driveThruCategoryDataItem);
+		
+		driveThruCategoryDataItem = new DriveThruCategoryDataItem();
+		driveThruCategoryDataItem.setCategoryName("sandwhich");
+		driveThruCategoryDataItems.add(driveThruCategoryDataItem);
+		return driveThruCategoryDataItems;
+		//return mapper.scan(DriveThruCategoryDataItem.class, scanExpression);
 	}
 }

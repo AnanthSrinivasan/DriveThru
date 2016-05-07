@@ -7,7 +7,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
-@DynamoDBTable(tableName = "MenuItems")
+@DynamoDBTable(tableName = "menu_items")
 public class DriveThruMenuItemDataItem {
 	
 private String categoryName;
@@ -16,7 +16,7 @@ private boolean isVegan;
 private String itemName;
 private int price;
 
-@DynamoDBHashKey(attributeName = "ItemName")
+@DynamoDBHashKey(attributeName = "item_name")
 public String getItemName() {
 	return itemName;
 }
@@ -24,7 +24,7 @@ public void setItemName(String itemName) {
 	this.itemName = itemName;
 }
 
-@DynamoDBRangeKey(attributeName = "CategoryName")
+@DynamoDBRangeKey(attributeName = "category_name")
 public String getCategoryName() {
 	return categoryName;
 }
@@ -32,7 +32,7 @@ public void setCategoryName(String categoryName) {
 	this.categoryName = categoryName;
 }
 
-@DynamoDBAttribute(attributeName = "Ingredients")
+@DynamoDBAttribute(attributeName = "ingredients")
 public List<String> getIngredients() {
 	return ingredients;
 }
@@ -40,7 +40,7 @@ public void setIngredients(List<String> ingredients) {
 	this.ingredients = ingredients;
 }
 
-@DynamoDBAttribute(attributeName = "isVegan")
+@DynamoDBAttribute(attributeName = "is_vegan")
 public boolean isVegan() {
 	return isVegan;
 }
@@ -48,7 +48,7 @@ public void setVegan(boolean isVegan) {
 	this.isVegan = isVegan;
 }
 
-@DynamoDBAttribute(attributeName = "Price")
+@DynamoDBAttribute(attributeName = "price")
 public int getPrice() {
 	return price;
 }

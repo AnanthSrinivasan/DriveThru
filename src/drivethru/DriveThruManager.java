@@ -10,26 +10,19 @@
 package drivethru;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.SortedMap;
-
-import drivethru.storage.DriveThruCategoryDataItem;
-import drivethru.storage.DriveThruDao;
-import drivethru.storage.DriveThruDynamoDbClient;
-import drivethru.storage.IDriveThruDao;
-import drivethru.storage.ScoreKeeperGame;
-import drivethru.storage.ScoreKeeperGameData;
 
 import com.amazon.speech.slu.Intent;
 import com.amazon.speech.speechlet.LaunchRequest;
 import com.amazon.speech.speechlet.Session;
 import com.amazon.speech.speechlet.SpeechletResponse;
-import com.amazon.speech.ui.Card;
 import com.amazon.speech.ui.PlainTextOutputSpeech;
 import com.amazon.speech.ui.Reprompt;
 import com.amazon.speech.ui.SimpleCard;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
+
+import drivethru.storage.DriveThruCategoryDataItem;
+import drivethru.storage.DriveThruDynamoDbClient;
+import drivethru.storage.IDriveThruDao;
 
 /**
  * The {@link DriveThruManager} receives various events and intents and manages the flow of the
@@ -82,7 +75,7 @@ public class DriveThruManager {
 
 //        scoreKeeperDao
         
-	    speechText = "here are the categories";
+	    speechText = "here are the categories. ";
 	    for(DriveThruCategoryDataItem driveThruCategoryDataItem : driveThruCategoryDataItems)
 	    {
 	    	speechText += driveThruCategoryDataItem.getCategoryName() + " , ";

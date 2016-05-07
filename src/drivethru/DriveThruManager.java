@@ -13,8 +13,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.SortedMap;
 
-import drivethru.storage.ScoreKeeperDao;
-import drivethru.storage.ScoreKeeperDynamoDbClient;
+import drivethru.storage.DriveThruDao;
+import drivethru.storage.DriveThruDynamoDbClient;
+import drivethru.storage.IDriveThruDao;
 import drivethru.storage.ScoreKeeperGame;
 import drivethru.storage.ScoreKeeperGameData;
 
@@ -34,12 +35,12 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
  */
 public class DriveThruManager {
 
-    private final ScoreKeeperDao scoreKeeperDao;
+    private final IDriveThruDao scoreKeeperDao;
 
     public DriveThruManager(final AmazonDynamoDBClient amazonDynamoDbClient) {
-        ScoreKeeperDynamoDbClient dynamoDbClient =
-                new ScoreKeeperDynamoDbClient(amazonDynamoDbClient);
-        scoreKeeperDao = new ScoreKeeperDao(dynamoDbClient);
+        DriveThruDynamoDbClient dynamoDbClient =
+                new DriveThruDynamoDbClient(amazonDynamoDbClient);
+        scoreKeeperDao = new DriveThruDao(dynamoDbClient);
     }
     
     /**

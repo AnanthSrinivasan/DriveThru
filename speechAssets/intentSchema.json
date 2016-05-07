@@ -1,0 +1,94 @@
+{
+  "intents": [
+    {
+      "intent": "UserNameIntent",
+      "slots": [
+        {
+          "name": "UserName",
+          "type": "AMAZON.US_FIRST_NAME"
+        }
+      ]
+    },
+    {
+      "intent": "InquiryIntent",
+      "slots": [
+        {
+          "name": "MenuItem",
+          "type": "LIST_OF_MENU_ITEMS"
+        },
+        {
+          "name": "Ingredient",
+          "type": "LIST_OF_INGREDIENTS"
+        }
+      ]
+    },
+    {
+      "intent": "OrderPlacementIntent",
+      "slots": [
+        {
+          "name": "Count",
+          "type": "AMAZON.NUMBER"
+        },
+        {
+          "name": "MenuItem",
+          "type": "LIST_OF_MENU_ITEMS"
+        },
+        {
+          "name": "Ingredient",
+          "type": "LIST_OF_INGREDIENTS"
+        }
+      ]
+    },
+    {
+      "intent": "OrderConfirmationIntent"
+    },
+    {
+      "intent": "WellBeingIntent",
+      "slots": [
+        {
+          "name": "UserName",
+          "type": "AMAZON.US_FIRST_NAME"
+        }
+      ]
+    },
+    {
+      "intent": "OrderChangeIntent",
+      "slots": [
+        {
+          "name": "Count",
+          "type": "AMAZON.NUMBER"
+        },
+        {
+          "name": "MenuItem",
+          "type": "LIST_OF_MENU_ITEMS"
+        },
+        {
+          "name": "Ingredient",
+          "type": "LIST_OF_INGREDIENTS"
+        }
+      ]
+    },
+    {
+      "intent": "PriceIntent",
+      "slots": [
+        {
+          "name": "Count",
+          "type": "AMAZON.NUMBER"
+        }
+      ]
+    },
+    {
+      "intent": "OrderRepeatIntent"
+    },
+    {
+      "intent": "AMAZON.HelpIntent"
+    },
+    {
+      "intent": "AMAZON.StopIntent"
+    },
+    {
+      "intent": "AMAZON.CancelIntent"
+    }
+  ]
+}
+

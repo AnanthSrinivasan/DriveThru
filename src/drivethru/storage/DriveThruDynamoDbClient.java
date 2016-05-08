@@ -12,12 +12,11 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
  * Client for DynamoDB persistance layer for the Score Keeper skill.
  */
 public class DriveThruDynamoDbClient implements IDriveThruDao{
-    private final AmazonDynamoDBClient dynamoDBClient;
     
-    private DynamoDBMapper mapper = createDynamoDBMapper();
+    private DynamoDBMapper dynamoDBMapper;
 
     public DriveThruDynamoDbClient(final AmazonDynamoDBClient dynamoDBClient) {
-        this.dynamoDBClient = dynamoDBClient;
+        dynamoDBMapper = new DynamoDBMapper(dynamoDBClient);
     }
 
     /**
@@ -28,8 +27,7 @@ public class DriveThruDynamoDbClient implements IDriveThruDao{
      * @return
      */
     public ScoreKeeperUserDataItem loadItem(final ScoreKeeperUserDataItem tableItem) {
-        DynamoDBMapper mapper = createDynamoDBMapper();
-        ScoreKeeperUserDataItem item = mapper.load(tableItem);
+        ScoreKeeperUserDataItem item = dynamoDBMapper.load(tableItem);
         return item;
     }
 
@@ -39,17 +37,7 @@ public class DriveThruDynamoDbClient implements IDriveThruDao{
      * @param tableItem
      */
     public void saveItem(final ScoreKeeperUserDataItem tableItem) {
-        DynamoDBMapper mapper = createDynamoDBMapper();
-        mapper.save(tableItem);
-    }
-
-    /**
-     * Creates a {@link DynamoDBMapper} using the default configurations.
-     * 
-     * @return
-     */
-    private DynamoDBMapper createDynamoDBMapper() {
-        return new DynamoDBMapper(dynamoDBClient);
+        dynamoDBMapper.save(tableItem);
     }
 
 	@Override
@@ -57,18 +45,18 @@ public class DriveThruDynamoDbClient implements IDriveThruDao{
 		DriveThruSessionDataItem driveThruSessionDataItem = new DriveThruSessionDataItem();
 		//TODO Set sessiondata.
 		
-		DriveThruSessionDataItem item = mapper.load(driveThruSessionDataItem);
+		DriveThruSessionDataItem item = dynamoDBMapper.load(driveThruSessionDataItem);
 		return item;
 	}
 
 	@Override
 	public void storeSessionInformation(DriveThruSessionDataItem sessionData) {
-		mapper.save(sessionData);
+		dynamoDBMapper.save(sessionData);
 	}
 
 	@Override
 	public void storeOrder(DriveThruOrderDataItem orderData) {
-		mapper.save(orderData);
+		dynamoDBMapper.save(orderData);
 	}
 
 	@Override
@@ -78,13 +66,13 @@ public class DriveThruDynamoDbClient implements IDriveThruDao{
 		//TODO set sessionId
 		
 		dynamoDBQueryExpression.withHashKeyValues(driveThruSessionDataItem).withConsistentRead(true);
-		List<DriveThruOrderDataItem> driveThruOrderDataItems = mapper.query(DriveThruOrderDataItem.class, dynamoDBQueryExpression);
+		List<DriveThruOrderDataItem> driveThruOrderDataItems = dynamoDBMapper.query(DriveThruOrderDataItem.class, dynamoDBQueryExpression);
 		return driveThruOrderDataItems;
 	}
 
 	@Override
 	public void cancelOrderById(DriveThruOrderDataItem orderData) {
-		mapper.delete(orderData);
+		dynamoDBMapper.delete(orderData);
 	}
 
 	@Override
@@ -115,7 +103,6 @@ public class DriveThruDynamoDbClient implements IDriveThruDao{
 	@Override
 	public List<DriveThruCategoryDataItem> getCategories() {
 		DynamoDBScanExpression scanExpression = new DynamoDBScanExpression();
-		DynamoDBMapper mapper = createDynamoDBMapper();
-		return mapper.scan(DriveThruCategoryDataItem.class, scanExpression);
+		return dynamoDBMapper.scan(DriveThruCategoryDataItem.class, scanExpression);
 	}
 }

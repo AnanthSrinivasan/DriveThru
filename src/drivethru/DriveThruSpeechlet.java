@@ -22,6 +22,7 @@ import com.amazon.speech.speechlet.Speechlet;
 import com.amazon.speech.speechlet.SpeechletException;
 import com.amazon.speech.speechlet.SpeechletResponse;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 
 /**
  * This sample shows how to create a Lambda function for handling Alexa Skill
@@ -74,7 +75,7 @@ public class DriveThruSpeechlet implements Speechlet {
 	private static final Logger log = LoggerFactory.getLogger(DriveThruSpeechlet.class);
 
 	private AmazonDynamoDBClient amazonDynamoDBClient;
-
+	
 	private DriveThruManager driveThruManager;
 
 	private SkillContext skillContext;

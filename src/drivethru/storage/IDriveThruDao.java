@@ -26,7 +26,7 @@ public interface IDriveThruDao {
 	List<DriveThruMenuItemDataItem> getSpecialMenus();
 	
 	//Get Menu below a price range
-	List<DriveThruMenuItemDataItem> getMenuByPriceRange(double low, double high);
+	List<DriveThruMenuItemDataItem> getMenuByPriceRange(String low, String high);
 	
 	//get MenuByCategories
 	List<DriveThruMenuItemDataItem> getMenuByCategories(String category);

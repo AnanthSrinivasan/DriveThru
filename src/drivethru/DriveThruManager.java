@@ -22,19 +22,34 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 
 import drivethru.storage.DriveThruCategoryDataItem;
 import drivethru.storage.DriveThruDynamoDbClient;
+import drivethru.storage.DriveThruSessionDataItem;
 import drivethru.storage.IDriveThruDao;
 
 /**
  * The {@link DriveThruManager} receives various events and intents and manages the flow of the
- * game.
+ * application.
  */
 public class DriveThruManager {
 
-    private final IDriveThruDao dynamoDbClient;
+    /**
+     * Intent slot for user name.
+     */
+    private static final String SLOT_USER_NAME = "UserName";
+
+    /**
+     * Intent slot for menu items.
+     */    
+    private static final String SLOT_MENU_ITEMS = "MenuItems";
+
+    /**
+     * Intent slot for ingredients.
+     */
+    private static final String SLOT_INGREDIENTS = "Ingredients";
+    
+    private final IDriveThruDao driveThruDao;
 
     public DriveThruManager(final AmazonDynamoDBClient amazonDynamoDbClient) {
-        dynamoDbClient =
-                new DriveThruDynamoDbClient(amazonDynamoDbClient);
+        driveThruDao = new DriveThruDynamoDbClient(amazonDynamoDbClient);
     }
     
     /**
@@ -50,18 +65,43 @@ public class DriveThruManager {
         // Speak welcome message and ask user questions
         String speechText, repromptText;
 
-        speechText = "Hello, Welcome to Sata Drive, Whom do I have the pleasure of working with today ?";
+        speechText = "Hello, Welcome to Sata Drive, "
+        		+ "Whom do I have the pleasure of working with today ?";
         repromptText = "May I know your name ? ";
 
         return getAskSpeechletResponse(speechText, repromptText);
     }
 
+    /*
+     * In this intent, we get the name of the user and store it into the 
+     * session table with the sessionId.
+     * Here we prompt the user for placing the order.
+     */
     public SpeechletResponse getUserNameIntentResponse(Intent intent, Session session, SkillContext skillContext) {
         // Speak welcome message and ask user questions
         String speechText, repromptText;
 
-	    speechText = "Welcome... How can I help you ?";
-	    repromptText = "Can you please give me your order ?";
+        String newDriveThruUserName =
+        		DriveThruTextUtil.getUserName(intent.getSlot(SLOT_USER_NAME).getValue());
+
+        speechText = "Welcome..." + newDriveThruUserName 
+        		+ " How can I help you today ?";
+	    repromptText = newDriveThruUserName + " Can you please give me your order ?";
+
+	    DriveThruSessionDataItem driveThruSessionDataItem = new DriveThruSessionDataItem();
+	    driveThruSessionDataItem.setName(newDriveThruUserName);
+	    driveThruSessionDataItem.setSessionId(session.getSessionId());
+	    driveThruDao.storeSessionInformation(driveThruSessionDataItem);
+	    
+        return getAskSpeechletResponse(speechText, repromptText);
+    }   
+
+    public SpeechletResponse getInquiryIntent(Intent intent, Session session, SkillContext skillContext) {
+        // Speak welcome message and ask user questions
+        String speechText, repromptText;
+
+        speechText = "";
+        repromptText = "";
 
         return getAskSpeechletResponse(speechText, repromptText);
     }   
@@ -69,11 +109,11 @@ public class DriveThruManager {
     public SpeechletResponse getCategoryInquiryIntent(Intent intent, Session session, SkillContext skillContext) {
         // Speak welcome message and ask user questions
         String speechText, repromptText;
-        List<DriveThruCategoryDataItem> driveThruCategoryDataItems = dynamoDbClient.getCategories();
+        List<DriveThruCategoryDataItem> driveThruCategoryDataItems = 
+        		driveThruDao.getCategories();
 
 	    speechText = "Here are the categories... ";
-	    for(DriveThruCategoryDataItem driveThruCategoryDataItem : driveThruCategoryDataItems)
-	    {
+	    for(DriveThruCategoryDataItem driveThruCategoryDataItem : driveThruCategoryDataItems) {
 	        speechText += driveThruCategoryDataItem.getCategoryName() + " , ";
 	    }
 	    repromptText = "Can you please give me your order ?";

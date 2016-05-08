@@ -104,11 +104,18 @@ public class DriveThruSpeechlet implements Speechlet {
 		initializeComponents();
 
 		Intent intent = request.getIntent();
+
+		// After we welcome the user, we ask for the user name
 		if ("UserNameIntent".equals(intent.getName())) {
 			return driveThruManager.getUserNameIntentResponse(intent, session, skillContext);
 
+		// When we prompt the user for the order, he might ask for the categories
 		} else if ("CategoryInquiryIntent".equals(intent.getName())) {
 			return driveThruManager.getCategoryInquiryIntent(intent, session, skillContext);
+
+		// When we prompt the user for the order, he might ask for the menu items			
+		} else if ("InquiryIntent".equals(intent.getName())) {
+			return driveThruManager.getInquiryIntent(intent, session, skillContext);
 
 		} else if ("AMAZON.HelpIntent".equals(intent.getName())) {
 			return driveThruManager.getHelpIntentResponse(intent, session, skillContext);

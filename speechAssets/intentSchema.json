@@ -10,14 +10,17 @@
       ]
     },
     {
+      "intent": "CategoryInquiryIntent"
+    },     
+    {
       "intent": "InquiryIntent",
       "slots": [
         {
-          "name": "MenuItem",
+          "name": "MenuItems",
           "type": "LIST_OF_MENU_ITEMS"
         },
         {
-          "name": "Ingredient",
+          "name": "Ingredients",
           "type": "LIST_OF_INGREDIENTS"
         }
       ]
@@ -30,11 +33,11 @@
           "type": "AMAZON.NUMBER"
         },
         {
-          "name": "MenuItem",
+          "name": "MenuItems",
           "type": "LIST_OF_MENU_ITEMS"
         },
         {
-          "name": "Ingredient",
+          "name": "Ingredients",
           "type": "LIST_OF_INGREDIENTS"
         }
       ]
@@ -59,11 +62,11 @@
           "type": "AMAZON.NUMBER"
         },
         {
-          "name": "MenuItem",
+          "name": "MenuItems",
           "type": "LIST_OF_MENU_ITEMS"
         },
         {
-          "name": "Ingredient",
+          "name": "Ingredients",
           "type": "LIST_OF_INGREDIENTS"
         }
       ]

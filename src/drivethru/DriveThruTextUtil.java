@@ -38,4 +38,30 @@ public final class DriveThruTextUtil {
     public static final String NEXT_HELP = "You can give a player points, add a player, get the "
             + "current score, or say help. What would you like?";
 
+    /**
+     * Cleans up the user name, and sanitizes it against the blacklist.
+     *
+     * @param recognizedUserName
+     * @return
+     */
+    public static String getUserName(String recognizedUserName) {
+        if (recognizedUserName == null || recognizedUserName.isEmpty()) {
+            return null;
+        }
+
+        String cleanedName;
+        if (recognizedUserName.contains(" ")) {
+            // the name should only contain a first name, so ignore the second part if any
+            cleanedName = recognizedUserName.substring(recognizedUserName.indexOf(" "));
+        } else {
+            cleanedName = recognizedUserName;
+        }
+
+        // if the name is on our blacklist, it must be mis-recognition
+        if (NAME_BLACKLIST.contains(cleanedName)) {
+            return null;
+        }
+
+        return cleanedName;
+    }    
 }

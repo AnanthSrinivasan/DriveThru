@@ -48,7 +48,6 @@ public class DriveThruManager {
      */
     public SpeechletResponse getLaunchResponse(LaunchRequest request, Session session) {
         // Speak welcome message and ask user questions
-        // based on whether there are players or not.
         String speechText, repromptText;
 
         speechText = "Hello, Welcome to Sata Drive, Whom do I have the pleasure of working with today ?";
@@ -61,8 +60,7 @@ public class DriveThruManager {
         // Speak welcome message and ask user questions
         String speechText, repromptText;
 
-//        scoreKeeperDao
-	    speechText = "Welcome... ? ";
+	    speechText = "Welcome... How can I help you ?";
 	    repromptText = "Can you please give me your order ?";
 
         return getAskSpeechletResponse(speechText, repromptText);
@@ -73,12 +71,10 @@ public class DriveThruManager {
         String speechText, repromptText;
         List<DriveThruCategoryDataItem> driveThruCategoryDataItems = dynamoDbClient.getCategories();
 
-//        scoreKeeperDao
-        
-	    speechText = "here are the categories. ";
+	    speechText = "Here are the categories... ";
 	    for(DriveThruCategoryDataItem driveThruCategoryDataItem : driveThruCategoryDataItems)
 	    {
-	    	speechText += driveThruCategoryDataItem.getCategoryName() + " , ";
+	        speechText += driveThruCategoryDataItem.getCategoryName() + " , ";
 	    }
 	    repromptText = "Can you please give me your order ?";
 

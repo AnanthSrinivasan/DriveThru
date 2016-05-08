@@ -1,19 +1,14 @@
 package drivethru.storage;
 
+import lombok.Data;
+
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
+@Data
 @DynamoDBTable(tableName = "menu_categories")
 public class DriveThruCategoryDataItem {
 	
-private String categoryName;
-
-@DynamoDBHashKey(attributeName = "category_name")
-public String getCategoryName() {
-	return categoryName;
-}
-public void setCategoryName(String categoryName) {
-	this.categoryName = categoryName;
-}
+    @DynamoDBHashKey(attributeName="category_name") private String categoryName;
 
 }

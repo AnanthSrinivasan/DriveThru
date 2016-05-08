@@ -115,17 +115,16 @@ public class DriveThruDynamoDbClient implements IDriveThruDao{
 	@Override
 	public List<DriveThruCategoryDataItem> getCategories() {
 		DynamoDBScanExpression scanExpression = new DynamoDBScanExpression();
-		List<DriveThruCategoryDataItem> driveThruCategoryDataItems = new ArrayList<>();
-		DriveThruCategoryDataItem driveThruCategoryDataItem = new DriveThruCategoryDataItem();
-		driveThruCategoryDataItem.setCategoryName("burger");
-		driveThruCategoryDataItems.add(driveThruCategoryDataItem);
-		
-		driveThruCategoryDataItem = new DriveThruCategoryDataItem();
-		driveThruCategoryDataItem.setCategoryName("sandwhich");
-		driveThruCategoryDataItems.add(driveThruCategoryDataItem);
-		//return driveThruCategoryDataItems;
+//		List<DriveThruCategoryDataItem> driveThruCategoryDataItems = new ArrayList<>();
+//		DriveThruCategoryDataItem driveThruCategoryDataItem = new DriveThruCategoryDataItem();
+//		driveThruCategoryDataItem.setCategoryName("burger");
+//		driveThruCategoryDataItems.add(driveThruCategoryDataItem);
+//		
+//		driveThruCategoryDataItem = new DriveThruCategoryDataItem();
+//		driveThruCategoryDataItem.setCategoryName("sandwhich");
+//		driveThruCategoryDataItems.add(driveThruCategoryDataItem);
+//		//return driveThruCategoryDataItems;
 		DynamoDBMapper mapper = createDynamoDBMapper();
-		
 		return mapper.scan(DriveThruCategoryDataItem.class, scanExpression);
 	}
 }

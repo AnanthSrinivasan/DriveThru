@@ -36,6 +36,12 @@ OrderPlacementIntent Yes I want to order more
 OrderPlacementIntent I want to order {MenuItems} without {Ingredients}
 OrderPlacementIntent I want to order {MenuItems} with {Count} {Ingredients}
 OrderPlacementIntent I wanna order {MenuItems}
+OrderPlacementIntent I wanna {MenuItems}
+OrderPlacementIntent I wanna {MenuItems} with {Ingredients}
+OrderPlacementIntent I wanted to order a {MenuItems}
+OrderPlacementIntent I wanted to order a {MenuItems} with {Ingredients}
+OrderPlacementIntent Please get me a {MenuItems} 
+OrderPlacementIntent Please get me a {MenuItems} with {Ingredients}
 
 OrderChangeIntent Can you cancel my last item
 OrderChangeIntent Can you make {Count} of my last item instead of {Count}

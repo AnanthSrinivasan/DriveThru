@@ -100,11 +100,17 @@ public class DriveThruManager {
     }   
 
     public SpeechletResponse getInquiryIntent(Intent intent, Session session, SkillContext skillContext) {
-        // Speak welcome message and ask user questions
         String speechText, repromptText;
 
-        speechText = "";
-        repromptText = "";
+        List<DriveThruCategoryDataItem> driveThruCategoryDataItems = 
+        		driveThruDao.getCategories();
+
+	    speechText = "Here are the menu items... ";
+	    for(DriveThruCategoryDataItem driveThruCategoryDataItem : driveThruCategoryDataItems) {
+	        speechText += driveThruCategoryDataItem.getCategoryName() + ", ";
+	    }
+	    speechText += "Can you please give me your order ?";
+	    repromptText = "Can you please give me your order ?";
 
         return getAskSpeechletResponse(speechText, repromptText);
     }   
@@ -118,6 +124,7 @@ public class DriveThruManager {
 	    for(DriveThruCategoryDataItem driveThruCategoryDataItem : driveThruCategoryDataItems) {
 	        speechText += driveThruCategoryDataItem.getCategoryName() + ", ";
 	    }
+	    speechText += "Can you please give me your order ?";
 	    repromptText = "Can you please give me your order ?";
 
         return getAskSpeechletResponse(speechText, repromptText);

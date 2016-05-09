@@ -28,6 +28,8 @@ CategoryInquiryIntent what do you serve
 CategoryInquiryIntent what are all the items available
 
 OrderPlacementIntent Yes I would like to order {Count} of them
+OrderPlacementIntent Do {Count} of them
+OrderPlacementIntent I could do with {Count} of them
 OrderPlacementIntent Yes I would like to order {Count} of those
 OrderPlacementIntent Yes I would like to order
 OrderPlacementIntent Yes I want to order more
@@ -42,6 +44,9 @@ OrderChangeIntent Can you remove {Ingredients} from {MenuItems}
 OrderRepeatIntent Can you tell what's on my order till now
 OrderRepeatIntent Can you tell what's on my order as of now
 OrderRepeatIntent Can you tell what's on my order now
+OrderRepeatIntent Can you please repeat the order
+OrderRepeatIntent repeat the order
+OrderRepeatIntent repeat order
 
 PriceIntent can you tell what are all the items under price of {Count} Dollars
 PriceIntent what do you have under {Count} dollars

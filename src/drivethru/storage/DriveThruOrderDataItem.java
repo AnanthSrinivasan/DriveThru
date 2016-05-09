@@ -12,6 +12,7 @@ public class DriveThruOrderDataItem {
 
     @DynamoDBHashKey(attributeName="session_id") private String sessionId;
     @DynamoDBRangeKey(attributeName="order_id") private String orderId;
+    @DynamoDBAttribute(attributeName="item_name") private String itemName;
     @DynamoDBAttribute(attributeName="status") private String status;
     @DynamoDBAttribute(attributeName="quantity") private int quantity;
     @DynamoDBAttribute(attributeName="price") private int price;

@@ -19,10 +19,10 @@ import com.amazon.speech.ui.PlainTextOutputSpeech;
 import com.amazon.speech.ui.Reprompt;
 import com.amazon.speech.ui.SimpleCard;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 
 import drivethru.storage.DriveThruCategoryDataItem;
 import drivethru.storage.DriveThruDynamoDbClient;
+import drivethru.storage.DriveThruOrderDataItem;
 import drivethru.storage.DriveThruSessionDataItem;
 import drivethru.storage.IDriveThruDao;
 
@@ -46,6 +46,8 @@ public class DriveThruManager {
      * Intent slot for ingredients.
      */
     private static final String SLOT_INGREDIENTS = "Ingredients";
+    
+    private static final String QUANTITY = "Count";
     
     private final IDriveThruDao driveThruDao;
 
@@ -85,9 +87,9 @@ public class DriveThruManager {
         String newDriveThruUserName =
         		DriveThruTextUtil.getUserName(intent.getSlot(SLOT_USER_NAME).getValue());
 
-        speechText = "Welcome..." + newDriveThruUserName 
-        		+ " How can I help you today ?";
-	    repromptText = newDriveThruUserName + " Can you please give me your order ?";
+        speechText = "Welcome " + newDriveThruUserName 
+        		+ ", How can I help you today ?";
+	    repromptText = newDriveThruUserName + ", Can you please give me your order ?";
 
 	    DriveThruSessionDataItem driveThruSessionDataItem = new DriveThruSessionDataItem();
 	    driveThruSessionDataItem.setName(newDriveThruUserName);
@@ -108,19 +110,87 @@ public class DriveThruManager {
     }   
     
     public SpeechletResponse getCategoryInquiryIntent(Intent intent, Session session, SkillContext skillContext) {
-        // Speak welcome message and ask user questions
         String speechText, repromptText;
         List<DriveThruCategoryDataItem> driveThruCategoryDataItems = 
         		driveThruDao.getCategories();
 
 	    speechText = "Here are the categories... ";
 	    for(DriveThruCategoryDataItem driveThruCategoryDataItem : driveThruCategoryDataItems) {
-	        speechText += driveThruCategoryDataItem.getCategoryName() + " , ";
+	        speechText += driveThruCategoryDataItem.getCategoryName() + ", ";
 	    }
 	    repromptText = "Can you please give me your order ?";
 
         return getAskSpeechletResponse(speechText, repromptText);
     }
+
+	public SpeechletResponse getOrderPlacementIntent(Intent intent, Session session, SkillContext skillContext) {
+        String speechText, repromptText;
+        String userName = driveThruDao.getSessionInformation(session.getSessionId()).getName();
+        String menuItems = intent.getSlot(SLOT_MENU_ITEMS).getValue();
+        String ingredients = intent.getSlot(SLOT_INGREDIENTS).getValue();        
+        int count = 0;
+
+        try {
+        		count = Integer.parseInt(intent.getSlot(QUANTITY).getValue());
+        } catch (NumberFormatException e) {
+            speechText = "Sorry, I did not hear the quantity. Please say again?";
+            return getAskSpeechletResponse(speechText, speechText);
+        }        		
+        		
+        speechText = "Sure " + userName 
+        		+ ", I am taking your Order.." 
+        		+ " You ordered " +  count + menuItems + " with " + ingredients
+        		+ " Whatelse can I add to your order ?";
+	    repromptText = userName + ", Whatelse can I add to your order ?";
+
+	    DriveThruOrderDataItem driveThruOrderDataItem = new DriveThruOrderDataItem();
+	    driveThruOrderDataItem.setItemName(menuItems);
+	    driveThruOrderDataItem.setOrderId(session.getSessionId() + "_" + userName + "_" + System.currentTimeMillis());
+	    driveThruOrderDataItem.setPrice(2);
+	    driveThruOrderDataItem.setQuantity(count);
+	    driveThruDao.storeOrder(driveThruOrderDataItem);
+	    
+        return getAskSpeechletResponse(speechText, repromptText);
+	}
+
+	public SpeechletResponse getOrderChangeIntent(Intent intent, Session session, SkillContext skillContext) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public SpeechletResponse getOrderRepeatIntent(Intent intent, Session session, SkillContext skillContext) {
+        String speechText, repromptText;
+        String userName = driveThruDao.getSessionInformation(session.getSessionId()).getName();
+        List<DriveThruOrderDataItem> orders = driveThruDao.getOrdersBySessionId(session.getSessionId());
+        
+        String existingOrder = null;
+        for(DriveThruOrderDataItem order : orders) {
+        		existingOrder += order.getQuantity() + order.getItemName();
+        }
+        	
+        speechText = "Sure " + userName 
+        		+ ", Here is what I have on your Order.." + existingOrder 
+        		+ " Do you want to add anything else to your order..."; 
+	    repromptText = userName + ", Can I confirm to place the order ?";
+
+        return getAskSpeechletResponse(speechText, repromptText);
+	}
+
+	public SpeechletResponse getOrderConfirmationIntent(Intent intent, Session session, SkillContext skillContext) {
+        String speechText;
+        double price = 0;
+        String userName = driveThruDao.getSessionInformation(session.getSessionId()).getName();
+        List<DriveThruOrderDataItem> orders = driveThruDao.getOrdersBySessionId(session.getSessionId());        
+
+        for(DriveThruOrderDataItem order : orders) {
+        		price += order.getPrice();
+        }
+        	
+        speechText = "Sure " + userName 
+        		+ ", Your order has been placed. And your total for today is " + price; 
+
+        return getAskSpeechletResponse(speechText, speechText);
+	}
     
     /**
      * Creates and returns response for the help intent.

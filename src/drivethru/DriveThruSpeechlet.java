@@ -106,18 +106,34 @@ public class DriveThruSpeechlet implements Speechlet {
 
 		Intent intent = request.getIntent();
 
-		// After we welcome the user, we ask for the user name
+		// After Alexa welcomes the user, we ask for the user name
 		if ("UserNameIntent".equals(intent.getName())) {
 			return driveThruManager.getUserNameIntentResponse(intent, session, skillContext);
 
-		// When we prompt the user for the order, he might ask for the categories
+		// When Alexa prompts the user for the order, he/she might ask for the categories
 		} else if ("CategoryInquiryIntent".equals(intent.getName())) {
 			return driveThruManager.getCategoryInquiryIntent(intent, session, skillContext);
 
-		// When we prompt the user for the order, he might ask for the menu items			
+		// When Alexa prompts the user for the order, he/she might ask for the menu items			
 		} else if ("InquiryIntent".equals(intent.getName())) {
 			return driveThruManager.getInquiryIntent(intent, session, skillContext);
 
+		// When Alexa prompts the user for the order, he might place the order			
+		} else if ("OrderPlacementIntent".equals(intent.getName())) {
+			return driveThruManager.getOrderPlacementIntent(intent, session, skillContext);
+
+		// When we prompt the user for the order, he might ask for the menu items			
+		} else if ("OrderChangeIntent".equals(intent.getName())) {
+			return driveThruManager.getOrderChangeIntent(intent, session, skillContext);
+
+		// When we prompt the user for the order, he might ask for the menu items			
+		} else if ("OrderRepeatIntent".equals(intent.getName())) {
+			return driveThruManager.getOrderRepeatIntent(intent, session, skillContext);
+
+		// When we prompt the user for the order, he might ask for the menu items			
+		} else if ("OrderConfirmationIntent".equals(intent.getName())) {
+			return driveThruManager.getOrderConfirmationIntent(intent, session, skillContext);
+			
 		} else if ("AMAZON.HelpIntent".equals(intent.getName())) {
 			return driveThruManager.getHelpIntentResponse(intent, session, skillContext);
 

@@ -128,7 +128,7 @@ public class DriveThruManager {
         String userName = driveThruDao.getSessionInformation(session.getSessionId()).getName();
         String menuItems = intent.getSlot(SLOT_MENU_ITEMS).getValue();
         String ingredients = intent.getSlot(SLOT_INGREDIENTS).getValue();        
-        int count = 0;
+        int count = 1;
 
         try {
         		count = Integer.parseInt(intent.getSlot(QUANTITY).getValue());
@@ -136,10 +136,15 @@ public class DriveThruManager {
             speechText = "Sorry, I did not hear the quantity. Please say again?";
             return getAskSpeechletResponse(speechText, speechText);
         }        		
-        		
+
+        String orderText = " You have ordered " + count + menuItems;
+        
+        if(ingredients != null) {
+        		orderText += " with " + ingredients;
+        }
+        	
         speechText = "Sure " + userName 
-        		+ ", I am taking your Order.." 
-        		+ " You ordered " +  count + menuItems + " with " + ingredients
+        		+ ", I am taking your Order.." + orderText
         		+ " Whatelse can I add to your order ?";
 	    repromptText = userName + ", Whatelse can I add to your order ?";
 

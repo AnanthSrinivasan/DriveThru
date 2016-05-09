@@ -62,13 +62,12 @@ public class DriveThruDynamoDbClient implements IDriveThruDao{
 
 	@Override
 	public List<DriveThruOrderDataItem> getOrdersBySessionId(String sessionId) {
-		DynamoDBQueryExpression dynamoDBQueryExpression = new DynamoDBQueryExpression<>();
-		DriveThruSessionDataItem driveThruSessionDataItem = new DriveThruSessionDataItem();
-		//TODO set sessionId
-		
-		dynamoDBQueryExpression.withHashKeyValues(driveThruSessionDataItem).withConsistentRead(true);
-		List<DriveThruOrderDataItem> driveThruOrderDataItems = dynamoDBMapper.query(DriveThruOrderDataItem.class, dynamoDBQueryExpression);
-		return driveThruOrderDataItems;
+		DynamoDBQueryExpression<DriveThruOrderDataItem> dynamoDBQueryExpression = 
+				new DynamoDBQueryExpression<DriveThruOrderDataItem>();
+		DriveThruOrderDataItem driveThruOrderDataItem = new DriveThruOrderDataItem();
+		driveThruOrderDataItem.setSessionId(sessionId);
+		dynamoDBQueryExpression.withHashKeyValues(driveThruOrderDataItem).withConsistentRead(true);
+		return dynamoDBMapper.query(DriveThruOrderDataItem.class, dynamoDBQueryExpression);
 	}
 
 	@Override

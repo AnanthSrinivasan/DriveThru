@@ -180,13 +180,13 @@ public class DriveThruManager {
         String userName = driveThruDao.getSessionInformation(session.getSessionId()).getName();
         List<DriveThruOrderDataItem> orders = driveThruDao.getOrdersBySessionId(session.getSessionId());
         
-        String existingOrder = null;
+        String existingOrder = "";
         for(DriveThruOrderDataItem order : orders) {
-        		existingOrder += order.getQuantity() + order.getItemName();
+        		existingOrder += order.getQuantity() + order.getItemName() + " ";
         }
         	
         speechText = "Sure " + userName 
-        		+ ", Here is what I have on your Order.." + existingOrder 
+        		+ ", Here is what I have on your Order " + existingOrder 
         		+ " Do you want to add anything else to your order..."; 
 	    repromptText = userName + ", Can I confirm to place the order ?";
 

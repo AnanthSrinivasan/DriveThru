@@ -46,10 +46,8 @@ public class DriveThruDynamoDbClient implements IDriveThruDao{
 	@Override
 	public DriveThruSessionDataItem getSessionInformation(String sessionId) {
 		DriveThruSessionDataItem driveThruSessionDataItem = new DriveThruSessionDataItem();
-		//TODO Set sessiondata.
-		
-		DriveThruSessionDataItem item = dynamoDBMapper.load(driveThruSessionDataItem);
-		return item;
+		driveThruSessionDataItem.setSessionId(sessionId);
+		return dynamoDBMapper.load(driveThruSessionDataItem);
 	}
 
 	@Override

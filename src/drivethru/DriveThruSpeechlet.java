@@ -9,9 +9,6 @@
  */
 package drivethru;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.amazon.speech.slu.Intent;
 import com.amazon.speech.speechlet.IntentRequest;
 import com.amazon.speech.speechlet.LaunchRequest;
@@ -22,58 +19,11 @@ import com.amazon.speech.speechlet.Speechlet;
 import com.amazon.speech.speechlet.SpeechletException;
 import com.amazon.speech.speechlet.SpeechletResponse;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 
-/**
- * This sample shows how to create a Lambda function for handling Alexa Skill
- * requests that:
- *
- * <ul>
- * <li><b>Multiple slots</b>: has 2 slots (name and score)</li>
- * <li><b>Database Interaction</b>: demonstrates how to read and write data to
- * DynamoDB.</li>
- * <li><b>NUMBER slot</b>: demonstrates how to handle number slots.</li>
- * <li><b>Custom slot type</b>: demonstrates using custom slot types to handle a
- * finite set of known values</li>
- * <li><b>Dialog and Session state</b>: Handles two models, both a one-shot ask
- * and tell model, and a multi-turn dialog model. If the user provides an
- * incorrect slot in a one-shot model, it will direct to the dialog model. See
- * the examples section below for sample interactions of these models.</li>
- * </ul>
- * <p>
- * <h2>Examples</h2>
- * <p>
- * <b>Dialog model</b>
- * <p>
- * User: "Alexa, tell score keeper to reset."
- * <p>
- * Alexa: "New game started without players. Who do you want to add first?"
- * <p>
- * User: "Add the player Bob"
- * <p>
- * Alexa: "Bob has joined your game"
- * <p>
- * User: "Add player Jeff"
- * <p>
- * Alexa: "Jeff has joined your game"
- * <p>
- * (skill saves the new game and ends)
- * <p>
- * User: "Alexa, tell score keeper to give Bob three points."
- * <p>
- * Alexa: "Updating your score, three points for Bob"
- * <p>
- * (skill saves the latest score and ends)
- * <p>
- * <b>One-shot model</b>
- * <p>
- * User: "Alexa, what's the current score?"
- * <p>
- * Alexa: "Jeff has zero points and Bob has three"
- */
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class DriveThruSpeechlet implements Speechlet {
-	private static final Logger log = LoggerFactory.getLogger(DriveThruSpeechlet.class);
-
 	private AmazonDynamoDBClient amazonDynamoDBClient;
 	
 	private DriveThruManager driveThruManager;
@@ -122,15 +72,14 @@ public class DriveThruSpeechlet implements Speechlet {
 		} else if ("OrderPlacementIntent".equals(intent.getName())) {
 			return driveThruManager.getOrderPlacementIntent(intent, session, skillContext);
 
-		// When we prompt the user for the order, he might ask for the menu items			
-		} else if ("OrderChangeIntent".equals(intent.getName())) {
-			return driveThruManager.getOrderChangeIntent(intent, session, skillContext);
+//		} else if ("OrderChangeIntent".equals(intent.getName())) {
+//			return driveThruManager.getOrderChangeIntent(intent, session, skillContext);
 
-		// When we prompt the user for the order, he might ask for the menu items			
+		// When the user asks the Alexa to repeat the order			
 		} else if ("OrderRepeatIntent".equals(intent.getName())) {
 			return driveThruManager.getOrderRepeatIntent(intent, session, skillContext);
 
-		// When we prompt the user for the order, he might ask for the menu items			
+		// When the user asks the Alexa to confirm the order			
 		} else if ("OrderConfirmationIntent".equals(intent.getName())) {
 			return driveThruManager.getOrderConfirmationIntent(intent, session, skillContext);
 			

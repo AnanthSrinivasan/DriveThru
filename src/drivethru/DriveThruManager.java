@@ -25,11 +25,13 @@ import drivethru.storage.DriveThruDynamoDbClient;
 import drivethru.storage.DriveThruOrderDataItem;
 import drivethru.storage.DriveThruSessionDataItem;
 import drivethru.storage.IDriveThruDao;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * The {@link DriveThruManager} receives various events and intents and manages the flow of the
  * application.
  */
+@Slf4j
 public class DriveThruManager {
 
     /**
@@ -130,47 +132,50 @@ public class DriveThruManager {
         return getAskSpeechletResponse(speechText, repromptText);
     }
 
-	public SpeechletResponse getOrderPlacementIntent(Intent intent, Session session, SkillContext skillContext) {
+    public SpeechletResponse getOrderPlacementIntent(Intent intent, Session session, SkillContext skillContext) {
         String speechText, repromptText;
-        String userName = driveThruDao.getSessionInformation(session.getSessionId()).getName();
+        String userName = getSessionUserName(session.getSessionId());
         String menuItems = intent.getSlot(SLOT_MENU_ITEMS).getValue();
-        String ingredients = intent.getSlot(SLOT_INGREDIENTS).getValue();        
+        String ingredients = intent.getSlot(SLOT_INGREDIENTS).getValue();
         int count = 1;
 
         try {
-        		count = Integer.parseInt(intent.getSlot(QUANTITY).getValue());
+	        	if(intent.getSlot(QUANTITY).getValue() != null) {
+	        		count = Integer.parseInt(intent.getSlot(QUANTITY).getValue());
+	        	}
         } catch (NumberFormatException e) {
             speechText = "Sorry, I did not hear the quantity. Please say again?";
             return getAskSpeechletResponse(speechText, speechText);
         }        		
-
-        String orderText = " You have ordered " + count + menuItems;
         
+        String orderText = " You have ordered " + count + menuItems;
         if(ingredients != null) {
         		orderText += " with " + ingredients;
         }
         	
         speechText = "Sure " + userName 
         		+ ", I am taking your Order.." + orderText
-        		+ " Whatelse can I add to your order ?";
-	    repromptText = userName + ", Whatelse can I add to your order ?";
+        		+ "... Whatelse can I add to your order ?";
+	    repromptText = userName + "... Whatelse can I add to your order ?";
 
 	    DriveThruOrderDataItem driveThruOrderDataItem = new DriveThruOrderDataItem();
-	    driveThruOrderDataItem.setItemName(menuItems);
 	    driveThruOrderDataItem.setOrderId(session.getSessionId() + "_" + userName + "_" + System.currentTimeMillis());
+	    driveThruOrderDataItem.setItemName(menuItems);
+	    driveThruOrderDataItem.setSessionId(session.getSessionId());
 	    driveThruOrderDataItem.setPrice(2);
 	    driveThruOrderDataItem.setQuantity(count);
+	    driveThruOrderDataItem.setStatus("PLACED");
 	    driveThruDao.storeOrder(driveThruOrderDataItem);
 	    
         return getAskSpeechletResponse(speechText, repromptText);
-	}
+    }
 
-	public SpeechletResponse getOrderChangeIntent(Intent intent, Session session, SkillContext skillContext) {
+    public SpeechletResponse getOrderChangeIntent(Intent intent, Session session, SkillContext skillContext) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public SpeechletResponse getOrderRepeatIntent(Intent intent, Session session, SkillContext skillContext) {
+    public SpeechletResponse getOrderRepeatIntent(Intent intent, Session session, SkillContext skillContext) {
         String speechText, repromptText;
         String userName = driveThruDao.getSessionInformation(session.getSessionId()).getName();
         List<DriveThruOrderDataItem> orders = driveThruDao.getOrdersBySessionId(session.getSessionId());
@@ -186,9 +191,9 @@ public class DriveThruManager {
 	    repromptText = userName + ", Can I confirm to place the order ?";
 
         return getAskSpeechletResponse(speechText, repromptText);
-	}
+    }
 
-	public SpeechletResponse getOrderConfirmationIntent(Intent intent, Session session, SkillContext skillContext) {
+    public SpeechletResponse getOrderConfirmationIntent(Intent intent, Session session, SkillContext skillContext) {
         String speechText;
         double price = 0;
         String userName = driveThruDao.getSessionInformation(session.getSessionId()).getName();
@@ -202,7 +207,7 @@ public class DriveThruManager {
         		+ ", Your order has been placed. And your total for today is " + price; 
 
         return getAskSpeechletResponse(speechText, speechText);
-	}
+    }
     
     /**
      * Creates and returns response for the help intent.
@@ -289,4 +294,7 @@ public class DriveThruManager {
         return SpeechletResponse.newTellResponse(speech, card);
     }
 
+    private String getSessionUserName(String sessionId) {
+        return driveThruDao.getSessionInformation(sessionId).getName();
+    }
 }
